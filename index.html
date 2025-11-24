@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quay số may mắn</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2c3e50;
+    }
+
+    .app {
+      width: min(1100px, 100%);
+      padding: 12px;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 24px;
+      padding: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        0 2px 8px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(20px);
+      max-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .title-block h1 {
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #2c3e50;
+      font-weight: 700;
+    }
+
+    .title-pill {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #ffffff;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .subtitle {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 4px;
+      color: #5a6c7d;
+    }
+
+    .config {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 130px;
+    }
+
+    .field label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.7;
+      color: #5a6c7d;
+      font-weight: 600;
+    }
+
+    .field input {
+      background: #f8f9fa;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 8px 12px;
+      color: #2c3e50;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .field input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+      background: #ffffff;
+    }
+
+    .pill-btn {
+      cursor: pointer;
+      border-radius: 999px;
+      border: none;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #ffffff;
+      box-shadow:
+        0 4px 12px rgba(102, 126, 234, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .pill-btn span.icon {
+      font-size: 14px;
+    }
+
+    .pill-btn:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 6px 16px rgba(102, 126, 234, 0.5),
+        0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .pill-btn:active {
+      transform: translateY(0);
+      box-shadow:
+        0 2px 8px rgba(102, 126, 234, 0.3),
+        0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
+      gap: 16px;
+      align-items: center;
+      flex: 1;
+      min-height: 0;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      max-width: 100%;
+    }
+
+    .wheel-shadow {
+      width: min(420px, 100%);
+      height: min(420px, 100%);
+      max-width: min(420px, calc(100vh - 200px));
+      max-height: min(420px, calc(100vh - 200px));
+      border-radius: 50%;
+      background: transparent;
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        0 4px 16px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    #wheelCanvas {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      border-radius: 50%;
+      background: transparent;
+      transform: rotate(0deg);
+    }
+
+    .pointer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -75px);
+      width: 0;
+      height: 0;
+      border-left: 16px solid transparent;
+      border-right: 16px solid transparent;
+      border-bottom: 26px solid #667eea;
+      filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.4));
+      z-index: 5;
+    }
+
+    .pointer::after {
+      content: "";
+      position: absolute;
+      top: 22px;
+      left: -10px;
+      width: 20px;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.6);
+    }
+
+    .hub {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #ffffff 0, #f0f2f5 25%, #e8ecf1 60%, #d1d9e6 100%);
+      box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.15),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #667eea;
+      text-align: center;
+    }
+
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .results {
+      background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+      border-radius: 20px;
+      padding: 10px 12px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      flex-shrink: 0;
+    }
+
+    .results-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      opacity: 0.7;
+      margin-bottom: 8px;
+      color: #5a6c7d;
+      font-weight: 600;
+    }
+
+    .current-result {
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      min-height: 40px;
+    }
+
+    .current-result span.label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      opacity: 0.7;
+      color: #5a6c7d;
+    }
+
+    .current-result span.value {
+      font-size: 28px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 800;
+      min-width: 30px;
+      display: inline-block;
+      text-align: left;
+    }
+
+    .history {
+      margin-top: 6px;
+      font-size: 11px;
+      opacity: 0.8;
+      color: #5a6c7d;
+      min-height: 40px;
+    }
+
+    .history span.tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin: 4px 4px 0 0;
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    #historyContainer {
+      min-height: 24px;
+      display: block;
+    }
+
+    .spin-btn {
+      margin-top: 10px;
+      align-self: flex-start;
+    }
+
+    .spin-btn .pill-btn {
+      font-size: 14px;
+      padding-inline: 24px;
+    }
+
+    .pill-btn[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+      filter: grayscale(0.1);
+    }
+
+    .info {
+      font-size: 11px;
+      opacity: 0.7;
+      line-height: 1.4;
+      flex-shrink: 0;
+      color: #5a6c7d;
+    }
+
+    .error {
+      color: #ff7b7b;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(102, 126, 234, 0.1);
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.9;
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #00f5a0;
+      box-shadow: 0 0 10px rgba(0, 245, 160, 0.9);
+    }
+
+    .winner-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 999;
+    }
+
+    .winner-modal.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .winner-card {
+      width: min(420px, 90vw);
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+      overflow: hidden;
+      animation: pop 0.35s ease;
+    }
+
+    @keyframes pop {
+      from {
+        transform: translateY(10px) scale(0.96);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .winner-card header {
+      background: #e53935;
+      color: #fff7f7;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .winner-card header button {
+      background: transparent;
+      border: none;
+      color: inherit;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+
+    .winner-body {
+      padding: 24px 28px 20px;
+      text-align: center;
+      color: #1f2933;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .winner-name {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      color: #1c1c1e;
+    }
+
+    .winner-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .winner-actions button {
+      border-radius: 12px;
+      border: none;
+      padding: 10px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-muted {
+      background: #eceff4;
+      color: #1f2933;
+    }
+
+    .btn-muted:hover {
+      background: #e1e6ef;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5565d0;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="card">
+      <div class="header">
+        <div class="title-block">
+          <h1>
+            Vòng quay may mắn
+            <span class="title-pill">Chiếc nón kỳ diệu</span>
+          </h1>
+          <p class="subtitle">
+            Nhập khoảng số bạn muốn &mdash; bấm quay &mdash; để số phận quyết định.
+          </p>
+        </div>
+
+        <div class="config">
+          <div class="field">
+            <label for="startInput">Số bắt đầu</label>
+            <input id="startInput" type="number" value="1" />
+          </div>
+          <div class="field">
+            <label for="endInput">Số kết thúc</label>
+            <input id="endInput" type="number" value="8" />
+          </div>
+          <button id="applyRangeBtn" class="pill-btn">
+            <span class="icon">⚙️</span>
+            <span>Cập nhật dải số</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="rangeError" class="error" style="display:none;"></div>
+
+      <div class="layout">
+        <div class="wheel-wrapper">
+          <div class="pointer"></div>
+          <div class="wheel-shadow">
+            <canvas id="wheelCanvas" width="500" height="500"></canvas>
+            <div class="hub">
+              SPIN<br />NOW
+            </div>
+          </div>
+        </div>
+
+        <div class="side-panel">
+          <div class="results">
+            <div class="results-title">Kết quả hiện tại</div>
+            <div class="current-result">
+              <span class="label">Số</span>
+              <span id="currentResult" class="value">-</span>
+            </div>
+            <div class="history">
+              <div>Đã quay: <span id="spinCount">0</span> lần</div>
+              <div id="historyContainer"></div>
+            </div>
+          </div>
+
+          <div class="spin-btn">
+            <button id="spinBtn" class="pill-btn">
+              <span class="icon">🎯</span>
+              <span>Quay ngay</span>
+            </button>
+          </div>
+
+          <div class="info">
+            <div class="badge">
+              <div class="badge-dot"></div>
+              <span>Real-time easing spin</span>
+            </div>
+            <p style="margin-top: 10px;">
+              &bull; Mỗi ô số là một sector trên vòng quay.<br />
+              &bull; Bạn có thể đổi dải số bất kỳ lúc nào.<br />
+              &bull; Kết quả hiển thị rõ ràng ở panel bên phải.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="winnerModal" class="winner-modal" aria-hidden="true">
+    <div class="winner-card">
+      <header>
+        <span>Chúng ta có một người chiến thắng!</span>
+        <button type="button" id="closeWinnerBtn" aria-label="Đóng thông báo">&times;</button>
+      </header>
+      <div class="winner-body">
+        <div class="winner-name" id="winnerName">-</div>
+        <div style="color:#6b7280;">Xem lại bảng kết quả hoặc tiếp tục lần quay tiếp theo.</div>
+        <div class="winner-actions">
+          <button type="button" class="btn-muted" id="dismissWinnerBtn">Đóng</button>
+          <button type="button" class="btn-primary" id="removeWinnerBtn">Xóa số khỏi vòng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("wheelCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const spinBtn = document.getElementById("spinBtn");
+    const applyRangeBtn = document.getElementById("applyRangeBtn");
+    const startInput = document.getElementById("startInput");
+    const endInput = document.getElementById("endInput");
+    const rangeError = document.getElementById("rangeError");
+    const currentResultEl = document.getElementById("currentResult");
+    const spinCountEl = document.getElementById("spinCount");
+    const historyContainer = document.getElementById("historyContainer");
+
+    const winnerModal = document.getElementById("winnerModal");
+    const winnerNameEl = document.getElementById("winnerName");
+    const closeWinnerBtn = document.getElementById("closeWinnerBtn");
+    const dismissWinnerBtn = document.getElementById("dismissWinnerBtn");
+    const removeWinnerBtn = document.getElementById("removeWinnerBtn");
+
+    const wheelElement = canvas; // dùng chính canvas để rotate
+    let numbers = [];
+    let currentRotationRad = 0;
+    let isSpinning = false;
+    let spinCount = 0;
+    let history = [];
+    let lastWinningNumber = null;
+
+    const applauseAudio = new Audio("https://actions.google.com/sounds/v1/crowd/applause.ogg");
+    applauseAudio.preload = "auto";
+
+    function generateNumbers(start, end) {
+      const arr = [];
+      const step = start <= end ? 1 : -1;
+      for (let i = start; step > 0 ? i <= end : i >= end; i += step) {
+        arr.push(i);
+      }
+      return arr;
+    }
+
+    function drawWheel() {
+      // Tăng độ phân giải để sắc nét hơn
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      const displayWidth = rect.width;
+      const displayHeight = rect.height;
+      
+      // Set actual size in memory (scaled for DPR)
+      if (canvas.width !== displayWidth * dpr || canvas.height !== displayHeight * dpr) {
+        canvas.width = displayWidth * dpr;
+        canvas.height = displayHeight * dpr;
+        canvas.style.width = displayWidth + 'px';
+        canvas.style.height = displayHeight + 'px';
+      }
+      
+      // Reset transform và scale context to account for DPR
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+      
+      const width = displayWidth;
+      const height = displayHeight;
+      const cx = width / 2;
+      const cy = height / 2;
+      const outerRadius = Math.min(width, height) / 2;
+      const innerRadius = 60;
+
+      ctx.clearRect(0, 0, width, height);
+
+      if (!numbers.length) return;
+
+      const n = numbers.length;
+      const step = (Math.PI * 2) / n;
+
+      // Tạo bảng màu đa dạng, đảm bảo các sector liền kề khác biệt
+      const colors = Array.from({ length: n }, (_, idx) => {
+        const hue = (idx / n) * 360;
+        const saturation = 75;
+        const lightness = 55;
+        return `hsl(${Math.round(hue)}, ${saturation}%, ${lightness}%)`;
+      });
+
+      for (let i = 0; i < n; i++) {
+        const angleStart = i * step;
+        const angleEnd = angleStart + step;
+        const baseColor = colors[i];
+        
+        // Vẽ sector với màu sắc rõ ràng, sắc nét
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, outerRadius, angleStart, angleEnd);
+        ctx.closePath();
+        
+        // Fill với màu rõ ràng - mỗi sector một màu riêng
+        ctx.fillStyle = baseColor;
+        ctx.fill();
+
+        ctx.save();
+        const textAngle = angleStart + step / 2;
+        // Padding để tránh hub và viền ngoài
+        const paddingFromHub = 10;
+        const paddingFromEdge = 6;
+        const availableRadius = outerRadius - paddingFromEdge - (innerRadius + paddingFromHub);
+        const layoutRadius = innerRadius + paddingFromHub + availableRadius * 0.6;
+        
+        // Tính toán kích thước sector để scale font phù hợp
+        const sectorArcLength = step * layoutRadius; // Chiều dài cung tại vị trí text
+        const sectorHeight = outerRadius - innerRadius; // Chiều cao sector
+        
+        const text = String(numbers[i]);
+        
+        const minFontSize = 5;
+        // Tính font size tối ưu dựa trên kích thước sector với padding
+        // Sử dụng 50% của chiều rộng sector hoặc 60% của chiều cao, lấy giá trị nhỏ hơn
+        // Giảm tỷ lệ để có padding tốt hơn
+        const maxFontSizeByWidth = sectorArcLength * 0.5;
+        const maxFontSizeByHeight = sectorHeight * 0.6;
+        let fontSize = Math.min(maxFontSizeByWidth, maxFontSizeByHeight);
+        
+        // Đảm bảo font size tối thiểu đủ lớn để đọc được (ít nhất 10px)
+        fontSize = Math.max(minFontSize, Math.min(fontSize, 48));
+        
+        // Đo kích thước text thực tế và điều chỉnh nếu cần
+        ctx.font = `bold ${fontSize}px system-ui`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        const textMetrics = ctx.measureText(text);
+        const textWidth = textMetrics.width;
+        const textHeight = fontSize * 1.2; // Ước tính chiều cao text với line height
+        
+        // Nếu text quá rộng, giảm font size (với padding 80% để có khoảng trống)
+        if (textWidth > sectorArcLength * 0.8) {
+          fontSize = (fontSize * sectorArcLength * 0.8) / textWidth;
+          fontSize = Math.max(minFontSize, Math.min(fontSize, 48));
+          ctx.font = `bold ${fontSize}px system-ui`;
+        }
+        
+        // Nếu text quá cao, giảm font size (với padding 80% để có khoảng trống)
+        if (textHeight > sectorHeight * 0.8) {
+          fontSize = (fontSize * sectorHeight * 0.8) / textHeight;
+          fontSize = Math.max(minFontSize, Math.min(fontSize, 48));
+          ctx.font = `bold ${fontSize}px system-ui`;
+        }
+        
+        // Chữ càng nhỏ thì càng xa trung tâm
+        const maxFontCap = 48;
+        const sizeFactor = 1 - Math.min(fontSize, maxFontCap) / maxFontCap; // nhỏ hơn => lớn hơn
+        const extraRadius = availableRadius * 0.35 * sizeFactor;
+        const finalTextRadius = Math.min(
+          outerRadius - paddingFromEdge,
+          layoutRadius + extraRadius
+        );
+        
+        ctx.translate(
+          cx + Math.cos(textAngle) * finalTextRadius,
+          cy + Math.sin(textAngle) * finalTextRadius
+        );
+        
+        // Khi font quá nhỏ, xoay text theo hướng radial để không tràn ra ngoài
+        const radialThreshold = 16;
+        const useRadialLayout = fontSize <= radialThreshold;
+        let rotation = useRadialLayout ? textAngle : textAngle + Math.PI / 2;
+        // Giữ text không bị ngược khi xoay radial
+        if (useRadialLayout && rotation > Math.PI / 2 && rotation < (3 * Math.PI) / 2) {
+          rotation += Math.PI;
+        }
+        ctx.rotate(rotation);
+        
+        // Text đậm và rõ ràng với outline trắng dày
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = Math.max(2, fontSize * 0.15);
+        ctx.lineJoin = "round";
+        ctx.miterLimit = 2;
+        
+        // Vẽ stroke trước (outline trắng)
+        ctx.strokeText(text, 0, 0);
+        
+        // Vẽ fill sau (màu đen đậm)
+        ctx.fillStyle = "#000000";
+        ctx.shadowColor = "rgba(0,0,0,0.3)";
+        ctx.shadowBlur = 2;
+        ctx.fillText(text, 0, 0);
+        
+        // Reset shadow
+        ctx.shadowBlur = 0;
+        
+        ctx.restore();
+      }
+
+      // Hub trắng rõ ràng với border
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, innerRadius, 0, Math.PI * 2);
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+      ctx.strokeStyle = "#e0e0e0";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function updateHistory(newNumber) {
+      history.unshift(newNumber);
+      if (history.length > 10) history.pop();
+
+      historyContainer.innerHTML = "";
+      history.forEach((num) => {
+        const span = document.createElement("span");
+        span.className = "tag";
+        span.textContent = num;
+        historyContainer.appendChild(span);
+      });
+    }
+
+    function playApplause() {
+      try {
+        applauseAudio.currentTime = 0;
+        applauseAudio.play();
+      } catch (error) {
+        console.warn("Unable to play applause sound", error);
+      }
+    }
+
+    function showWinnerModal(winner) {
+      winnerNameEl.textContent = winner;
+      winnerModal.classList.add("visible");
+      playApplause();
+    }
+
+    function hideWinnerModal() {
+      winnerModal.classList.remove("visible");
+    }
+
+    function removeWinnerFromWheel() {
+      if (lastWinningNumber === null) return;
+      numbers = numbers.filter((num) => num !== lastWinningNumber);
+      if (!numbers.length) {
+        spinBtn.disabled = true;
+      }
+      currentRotationRad = 0;
+      wheelElement.style.transition = "none";
+      wheelElement.style.transform = "rotate(0deg)";
+      drawWheel();
+      lastWinningNumber = null;
+      hideWinnerModal();
+    }
+
+    function finalizeSpin(winningNumber) {
+      lastWinningNumber = winningNumber;
+      currentResultEl.textContent = winningNumber;
+      spinCount += 1;
+      spinCountEl.textContent = spinCount.toString();
+      updateHistory(winningNumber);
+      showWinnerModal(winningNumber);
+      isSpinning = false;
+      spinBtn.disabled = false;
+    }
+
+    function applyRange() {
+      let start = parseInt(startInput.value, 10);
+      let end = parseInt(endInput.value, 10);
+
+      // Nếu NaN thì mặc định là 0
+      if (Number.isNaN(start)) {
+        start = 0;
+        startInput.value = 0;
+      }
+      if (Number.isNaN(end)) {
+        end = 0;
+        endInput.value = 0;
+      }
+
+    //   if (start === end) {
+    //     rangeError.textContent = "Khoảng số phải có ít nhất 2 giá trị khác nhau.";
+    //     rangeError.style.display = "block";
+    //     return;
+    //   }
+
+      rangeError.style.display = "none";
+
+      numbers = generateNumbers(start, end);
+      currentRotationRad = 0;
+      wheelElement.style.transition = "none";
+      wheelElement.style.transform = "rotate(0deg)";
+
+      drawWheel();
+
+      currentResultEl.textContent = "-";
+      spinCount = 0;
+      spinCountEl.textContent = "0";
+      history = [];
+      historyContainer.innerHTML = "";
+    }
+
+    // Tạo audio context cho âm thanh (lazy initialization)
+    let audioContext = null;
+    
+    function initAudioContext() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      // Resume nếu bị suspended (do browser policy)
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+    }
+    
+    function playTickSound() {
+      if (!audioContext) {
+        initAudioContext();
+      }
+      
+      try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+      } catch (e) {
+        // Ignore audio errors
+        console.log('Audio error:', e);
+      }
+    }
+
+    // Easing function: Chậm → Nhanh → Đỉnh → Nhanh → Chậm (mượt mà như CSS3-2D)
+    // Tham khảo từ CSS3 transitions với cubic-bezier mượt mà
+    function easeInOutCubic(t) {
+      // Đảm bảo t trong khoảng [0, 1]
+      t = Math.max(0, Math.min(1, t));
+      
+      // Sử dụng một hàm liên tục hoàn toàn, không có điểm gãy
+      // Tạo đường cong mượt mà: chậm → nhanh → đỉnh → nhanh → chậm
+      // Sử dụng polynomial interpolation để đảm bảo đạo hàm liên tục
+      
+      // Tạo 5 điểm chính với các giá trị mượt mà
+      // Điểm: (0,0), (0.15, 0.1), (0.5, 0.5), (0.85, 0.9), (1, 1)
+      // Sử dụng Hermite interpolation để đảm bảo đạo hàm liên tục
+      
+      if (t <= 0) return 0;
+      if (t >= 1) return 1;
+      
+      // Sử dụng một hàm đơn giản hơn nhưng mượt mà hoàn toàn
+      // Tạo đường cong với đỉnh ở giữa
+      const t2 = t * t;
+      const t3 = t2 * t;
+      
+      // Điều chỉnh để có đỉnh rõ ràng hơn ở giữa
+      // Sử dụng hàm bậc 4 để tạo đường cong mượt mà hơn
+      if (t < 0.5) {
+        // Nửa đầu: chậm → nhanh → đỉnh
+        const x = t * 2; // Normalize về [0, 1]
+        // Ease in với đỉnh
+        const eased = x * x * (3 - 2 * x); // Smoothstep
+        return eased * 0.5;
+      } else {
+        // Nửa sau: đỉnh → nhanh → chậm
+        const x = (t - 0.5) * 2; // Normalize về [0, 1]
+        // Ease out với đỉnh
+        const eased = 1 - (1 - x) * (1 - x) * (3 - 2 * (1 - x)); // Smoothstep ngược
+        return 0.5 + eased * 0.5;
+      }
+    }
+
+    function spin() {
+      if (isSpinning || numbers.length === 0) return;
+      
+      // Khởi tạo audio context khi user tương tác
+      initAudioContext();
+      
+      isSpinning = true;
+      spinBtn.disabled = true;
+
+      const n = numbers.length;
+      const step = (Math.PI * 2) / n;
+
+      const winIndex = Math.floor(Math.random() * n);
+
+      const alphaTarget = winIndex * step + step / 2;
+      const theta0 = -Math.PI / 2 - alphaTarget;
+
+      const startTheta = currentRotationRad;
+      
+      // Tính góc đích (normalize về 0-2π)
+      let targetAngle = theta0 % (Math.PI * 2);
+      if (targetAngle < 0) targetAngle += Math.PI * 2;
+      
+      // Tính góc bắt đầu (normalize về 0-2π)
+      let startAngle = startTheta % (Math.PI * 2);
+      if (startAngle < 0) startAngle += Math.PI * 2;
+      
+      // Tính số vòng quay cần thiết để đạt góc đích
+      let angleDiff = targetAngle - startAngle;
+      
+      // Nếu góc đích nhỏ hơn góc bắt đầu, cần thêm một vòng
+      if (angleDiff < 0) {
+        angleDiff += Math.PI * 2;
+      }
+      
+      // Quay nhiều vòng để tự nhiên hơn (tối thiểu 5-8 vòng ngẫu nhiên)
+      const minSpins = 5;
+      const maxSpins = 15;
+      const randomSpins = minSpins + Math.floor(Math.random() * (maxSpins - minSpins + 1));
+      
+      // Tính tổng góc quay cần thiết (luôn dương)
+      const totalRotation = 2 * Math.PI * randomSpins + angleDiff;
+      
+      // Tính góc cuối cùng: bắt đầu từ góc hiện tại + tổng góc quay
+      // Đảm bảo luôn tăng (quay thuận chiều kim đồng hồ)
+      const finalTheta = startTheta + totalRotation;
+      
+      // Tắt CSS transition để dùng JavaScript animation
+      wheelElement.style.transition = "none";
+      
+      // Thời gian quay dựa trên số vòng quay để tự nhiên hơn
+      const duration = 6000 + Math.random() * 4000; // 6-10 giây ngẫu nhiên
+      
+      // Chia thành 2 giai đoạn: tăng tốc và giảm tốc
+      const accelerationPhase = duration * 0.4; // 40% thời gian để tăng tốc
+      const decelerationPhase = duration * 0.6; // 60% thời gian để giảm tốc
+      
+      // Tính gia tốc và tốc độ tối đa
+      // Giai đoạn 1: tăng tốc từ 0 đến v_max trong thời gian t1
+      // Quãng đường trong giai đoạn 1: s1 = 0.5 * a1 * t1²
+      // Giai đoạn 2: giảm tốc từ v_max về 0 trong thời gian t2
+      // Quãng đường trong giai đoạn 2: s2 = v_max * t2 - 0.5 * a2 * t2²
+      // Để tốc độ về 0 khi hết thời gian: v_max - a2 * t2 = 0 => a2 = v_max / t2
+      // Với v_max = a1 * t1, ta có: a2 = a1 * t1 / t2
+      // Tổng quãng đường: s1 + s2 = totalRotation
+      // totalRotation = 0.5 * a1 * t1² + a1 * t1 * t2 - 0.5 * (a1 * t1 / t2) * t2²
+      // totalRotation = 0.5 * a1 * t1² + a1 * t1 * t2 - 0.5 * a1 * t1 * t2
+      // totalRotation = 0.5 * a1 * t1² + 0.5 * a1 * t1 * t2
+      // totalRotation = 0.5 * a1 * t1 * (t1 + t2)
+      // a1 = 2 * totalRotation / (t1 * (t1 + t2))
+      
+      const t1 = accelerationPhase / 1000; // Chuyển sang giây
+      const t2 = decelerationPhase / 1000; // Chuyển sang giây
+      const acceleration = (2 * totalRotation) / (t1 * (t1 + t2)); // Gia tốc trong giai đoạn 1
+      const maxSpeed = acceleration * t1; // Tốc độ tối đa
+      const deceleration = maxSpeed / t2; // Gia tốc (âm) trong giai đoạn 2
+      
+      let startTime = performance.now();
+      let lastTime = startTime;
+      let currentRotation = startTheta;
+      
+      // Track sector để phát âm thanh
+      const sectorStep = (Math.PI * 2) / n;
+      let lastSectorIndex = -1;
+      
+      // Hàm animate với tăng tốc rồi giảm tốc
+      function animate() {
+        if (!isSpinning) return;
+        
+        const now = performance.now();
+        const elapsed = (now - startTime) / 1000; // Thời gian từ đầu (giây)
+        const deltaTime = (now - lastTime) / 1000; // Thời gian giữa các frame (giây)
+        lastTime = now;
+        
+        let currentSpeed = 0;
+        
+        // Giai đoạn 1: Tăng tốc từ 0 (v = 0 + a*t)
+        if (elapsed < t1) {
+          currentSpeed = acceleration * elapsed; // v = a*t
+        }
+        // Giai đoạn 2: Giảm tốc từ v_max về 0 (v = v_max - a2*t)
+        else if (elapsed < t1 + t2) {
+          const decelTime = elapsed - t1; // Thời gian trong giai đoạn giảm tốc
+          currentSpeed = maxSpeed - deceleration * decelTime; // v = v_max - a2*t
+          currentSpeed = Math.max(0, currentSpeed); // Đảm bảo không âm
+        }
+        // Đã hết thời gian, dừng hoàn toàn
+        else {
+          currentSpeed = 0;
+        }
+        
+        // Nếu tốc độ đã về 0 và đã hết thời gian, dừng ngay tại vị trí hiện tại
+        if (currentSpeed <= 0.001 && elapsed >= t1 + t2) {
+          // Dừng tại vị trí hiện tại, không điều chỉnh thêm
+          const finalDeg = (currentRotation * 180) / Math.PI;
+          wheelElement.style.transform = `rotate(${finalDeg}deg)`;
+          currentRotationRad = currentRotation;
+          
+          // Tính lại kết quả dựa trên vị trí dừng thực tế
+          // Pointer ở trên cùng (-Math.PI/2), khi wheel quay currentRotation,
+          // góc của pointer trong hệ tọa độ wheel gốc là -Math.PI/2 - currentRotation
+          let pointerAngle = -Math.PI / 2 - currentRotation;
+          // Normalize về [0, 2π]
+          pointerAngle = ((pointerAngle % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+          const actualWinIndex = Math.floor(pointerAngle / sectorStep) % n;
+          const winningNumber = numbers[actualWinIndex];
+          
+          finalizeSpin(winningNumber);
+          return;
+        }
+        
+        // Tính góc quay trong frame này dựa trên tốc độ hiện tại
+        // deltaTheta = v * deltaTime
+        const deltaTheta = currentSpeed * deltaTime;
+        
+        // Cập nhật góc quay (luôn tăng)
+        currentRotation += deltaTheta;
+        
+        // Nếu đã vượt quá góc đích, dừng tại vị trí hiện tại
+        if (currentRotation >= finalTheta) {
+          // Dừng tại vị trí hiện tại, không ép về finalTheta
+          const finalDeg = (currentRotation * 180) / Math.PI;
+          wheelElement.style.transform = `rotate(${finalDeg}deg)`;
+          currentRotationRad = currentRotation;
+          
+          // Tính lại kết quả dựa trên vị trí dừng thực tế
+          // Pointer ở trên cùng (-Math.PI/2), khi wheel quay currentRotation,
+          // góc của pointer trong hệ tọa độ wheel gốc là -Math.PI/2 - currentRotation
+          let pointerAngle = -Math.PI / 2 - currentRotation;
+          // Normalize về [0, 2π]
+          pointerAngle = ((pointerAngle % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+          const actualWinIndex = Math.floor(pointerAngle / sectorStep) % n;
+          const winningNumber = numbers[actualWinIndex];
+          
+          finalizeSpin(winningNumber);
+          return;
+        }
+        
+        // Áp dụng transform
+        const currentDeg = (currentRotation * 180) / Math.PI;
+        wheelElement.style.transform = `rotate(${currentDeg}deg)`;
+        
+        // Tính sector hiện tại để track
+        // Pointer ở trên cùng (-Math.PI/2), khi wheel quay currentRotation,
+        // góc của pointer trong hệ tọa độ wheel gốc là -Math.PI/2 - currentRotation
+        let pointerAngle = -Math.PI / 2 - currentRotation;
+        // Normalize về [0, 2π]
+        pointerAngle = ((pointerAngle % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+        const currentSectorIndex = Math.floor(pointerAngle / sectorStep);
+        
+        // Phát âm thanh khi quay qua sector mới
+        // if (currentSectorIndex !== lastSectorIndex && lastSectorIndex !== -1) {
+        //   playTickSound();
+        // }
+        // lastSectorIndex = currentSectorIndex;
+        
+        // Tiếp tục animation
+        requestAnimationFrame(animate);
+      }
+      
+      // Bắt đầu animation
+      requestAnimationFrame(animate);
+    }
+
+    applyRange();
+
+    applyRangeBtn.addEventListener("click", applyRange);
+    spinBtn.addEventListener("click", spin);
+
+    // Hàm xóa số 0 ở đầu nếu giá trị khác 0
+    function removeLeadingZeros(input) {
+      const value = input.value;
+      // Nếu có số 0 ở đầu và giá trị khác 0, xóa số 0 đầu tiên
+      if (value.length > 1 && value[0] === '0' && parseInt(value, 10) !== 0) {
+        input.value = value.replace(/^0+/, '') || '0';
+      }
+    }
+
+    // Debounce function để tránh cập nhật quá nhiều lần
+    let updateTimeout;
+    function debouncedApplyRange() {
+      clearTimeout(updateTimeout);
+      updateTimeout = setTimeout(() => {
+        applyRange();
+      }, 300); // Đợi 300ms sau khi người dùng dừng gõ
+    }
+
+    // Xử lý input để xóa số 0 ở đầu
+    startInput.addEventListener("input", (e) => {
+      removeLeadingZeros(e.target);
+      debouncedApplyRange();
+    });
+    endInput.addEventListener("input", (e) => {
+      removeLeadingZeros(e.target);
+      debouncedApplyRange();
+    });
+
+    startInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        clearTimeout(updateTimeout);
+        applyRange();
+      }
+    });
+    endInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        clearTimeout(updateTimeout);
+        applyRange();
+      }
+    });
+
+    closeWinnerBtn.addEventListener("click", hideWinnerModal);
+    dismissWinnerBtn.addEventListener("click", hideWinnerModal);
+    winnerModal.addEventListener("click", (event) => {
+      if (event.target === winnerModal) {
+        hideWinnerModal();
+      }
+    });
+    removeWinnerBtn.addEventListener("click", removeWinnerFromWheel);
+  </script>
+</body>
+</html>
